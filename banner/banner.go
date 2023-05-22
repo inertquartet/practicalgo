@@ -21,6 +21,10 @@ func main() {
 	b := s[0]
 	fmt.Printf("%c of type %T\n", b, b) // byte (uint8)
 
+	x, y := 1, "1"
+	fmt.Printf("x=%v, y=%v\n", x, y)
+	fmt.Printf("x=%#v, y=%#v\n", x, y) // %#v prints the Go syntax representation of the value, which is useful for debugging/logging
+
 	fmt.Println(isPalindrome("g"))
 	fmt.Println(isPalindrome("go"))
 	fmt.Println(isPalindrome("gog"))
