@@ -20,6 +20,11 @@ func main() {
 
 	b := s[0]
 	fmt.Printf("%c of type %T\n", b, b) // byte (uint8)
+
+	fmt.Println(isPalindrome("g"))
+	fmt.Println(isPalindrome("go"))
+	fmt.Println(isPalindrome("gog"))
+	fmt.Println(isPalindrome("gogo"))
 }
 
 // isPalindrome("g") => true
@@ -28,7 +33,14 @@ func main() {
 // isPalindrome("gogo") => false
 func isPalindrome(s string) bool {
 	// TODO: implementation goes here
-	return false
+	length := len(s)
+	for i := 0; i < (length / 2); i++ {
+		if s[i] != s[length-i-1] {
+			return false
+		}
+
+	}
+	return true
 }
 
 func banner(text string, width int) {
