@@ -36,10 +36,9 @@ func main() {
 // isPalindrome("gog") => true
 // isPalindrome("gogo") => false
 func isPalindrome(s string) bool {
-	// TODO: implementation goes here
-	length := len(s)
-	for i := 0; i < (length / 2); i++ {
-		if s[i] != s[length-i-1] {
+	rs := []rune(s) // get a slice of runes from the string.,
+	for i := 0; i < len(rs)/2; i++ {
+		if s[i] != s[len(rs)-i-1] {
 			return false
 		}
 
