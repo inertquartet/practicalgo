@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	/* 	var s []int                // s is a slice of ints
@@ -31,6 +34,30 @@ func main() {
 	// s4[1001] = 7 // panic: runtime error: index out of range [1001] with length 1001
 
 	fmt.Println(concat([]string{"A", "B"}, []string{"C", "D", "E"})) // [A B C D E]
+
+	vs := []float64{2, 1, 3}
+	fmt.Println(median(vs)) // 2
+	vs = []float64{2, 1, 3, 4}
+	fmt.Println(median(vs)) // 2.5
+	fmt.Println(vs)         // [2 1 3 4]
+
+	fmt.Print(median(nil))
+}
+
+func median(values []float64) (float64, error) {
+	if len(values) == 0 {
+		return 0, fmt.Errorf("median of empty slice is not defined")
+	}
+	// Copy in order not to chance values
+	nums := make([]float64, len(values))
+	copy(nums, values)
+	sort.Float64s(nums)
+	i := len(nums) / 2
+	if len(nums)%2 == 1 {
+		return nums[i], nil
+
+	v := (nums[i-1] + nums[i]) / 2
+	return v, nil
 }
 
 func concat(s1, s2 []string) []string {
@@ -43,6 +70,7 @@ func concat(s1, s2 []string) []string {
 		copy(s3, s1)
 		copy(s3[len(s1):], s2)
 		return s3
+		//return append(s1, s2...)
 	}
 }
 
