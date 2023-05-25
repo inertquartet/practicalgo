@@ -41,12 +41,12 @@ func sha1Sum(fileName string) (string, error) {
 	var r io.Reader = file
 
 	if strings.HasSuffix(fileName, ".gz") {
-		file, err := gzip.NewReader(file)
+		gz, err := gzip.NewReader(file)
 		if err != nil {
 			return "", err
 		}
-		defer file.Close()
-		r = file
+		defer gz.Close()
+		r = gz
 	}
 
 	// io.CopyN(os.Stdout, r, 1024)
