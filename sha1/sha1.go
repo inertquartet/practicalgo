@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -15,9 +16,21 @@ func main() {
 		log.Fatalf("sha1Sum failed: %s", err)
 	}
 	fmt.Println(sig)
+
+	sig, err = sha1Sum("sha1.go")
+	if err != nil {
+		log.Fatalf("sha1Sum failed: %s", err)
+	}
+	fmt.Println(sig)
 }
 
-// $ cat http.log.gz | gunzip | sha1sum
+/*
+if file name ends with .gz
+	$ cat http.log.gz | gunzip | sha1sum
+else
+	$ cat http.log.gz | sha1sum
+*/
+
 func sha1Sum(fileName string) (string, error) {
 	// idiom: acquire a resoruce, check for acquisition error, defer its release
 	file, err := os.Open(fileName)
@@ -25,10 +38,15 @@ func sha1Sum(fileName string) (string, error) {
 		return "", nil
 	}
 	defer file.Close() // defers asre called in LIFO order
+	var r io.Reader = file
 
-	r, err := gzip.NewReader(file)
-	if err != nil {
-		return "", err
+	if strings.HasSuffix(fileName, ".gz") {
+		file, err := gzip.NewReader(file)
+		if err != nil {
+			return "", err
+		}
+		defer file.Close()
+		r = file
 	}
 
 	// io.CopyN(os.Stdout, r, 1024)
