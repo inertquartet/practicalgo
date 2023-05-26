@@ -43,7 +43,34 @@ func main() {
 		fmt.Println(m)
 	}
 
+	k := Jade
+	fmt.Println("k: ", k)
 }
+
+// This is an implementation of the fmt.Stringer interface
+func (k Key) String() string {
+	switch k {
+	case Jade:
+		return "Jade"
+	case Copper:
+		return "Copper"
+	case Crystal:
+		return "Crystal"
+	}
+
+	return fmt.Sprintf("<Key %d>", k)
+}
+
+// Go's version of "enum"
+const (
+	// Jade has a type of `Key`, but Coppeer and Crystal are of type byte
+	// iota inside a const group is always incremented by 1
+	Jade Key = iota + 1
+	Copper
+	Crystal
+)
+
+type Key byte
 
 /* go >= 1.18
 func NewNumber[T int | float64](kind string) T {
