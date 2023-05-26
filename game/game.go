@@ -45,6 +45,15 @@ func main() {
 
 }
 
+/* go >= 1.18
+func NewNumber[T int | float64](kind string) T {
+	if kind == "int" {
+		return 0
+	}
+	return 0.0
+}
+*/
+
 // Rule of thumb: Accept interfaces, return types
 
 func moveAll(ms []mover, x, y int) {
