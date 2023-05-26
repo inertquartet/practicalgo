@@ -44,21 +44,27 @@ func main() {
 	}
 
 	k := Jade
-	fmt.Println("k: ", k)
-	fmt.Println("key: ", Key(17))
-	// time.Time implements the json.Marshaler interface
+	fmt.Println("k:", k)
+	fmt.Println("key:", Key(17))
+
+	// time.Time import json.Marshaler interface
 	// json.NewEncoder(os.Stdout).Encode(time.Now())
+
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
 }
 
-// This is an implementation of the fmt.Stringer interface
+// Implement fmt.Stringer interface
 func (k Key) String() string {
 	switch k {
 	case Jade:
-		return "Jade"
+		return "jade"
 	case Copper:
-		return "Copper"
+		return "copper"
 	case Crystal:
-		return "Crystal"
+		return "crystal"
 	}
 
 	return fmt.Sprintf("<Key %d>", k)
@@ -66,17 +72,16 @@ func (k Key) String() string {
 
 /* Exercise
 - Add a "Keys" field to Player which is a slice of Key
-- Add a "FoundKey(k key) error" method to Player which will add k to Key if it's not already there.
-    - Err if k is not one of the known key types
+- Add a "FoundKey(k Key) error" method to player which will add k to Key if it's not there
+	- Err if k is not one of the known keys
 */
 
 // Go's version of "enum"
 const (
-	// Jade has a type of `Key`, but Coppeer and Crystal are of type byte
-	// iota inside a const group is always incremented by 1
 	Jade Key = iota + 1
 	Copper
 	Crystal
+	invalidKey // internal (not exported)
 )
 
 type Key byte
@@ -103,22 +108,34 @@ type mover interface {
 	// Move(int, int)
 }
 
+func (p *Player) FoundKey(k Key) error {
+	if k < Jade || k >= invalidKey {
+		return fmt.Errorf("invalid key: %#v", k)
+	}
+
+	if !containsKey(p.Keys, k) {
+		// if !slices.Contains(p.Keys, k) {
+		p.Keys = append(p.Keys, k)
+	}
+
+	return nil
+}
+
+func containsKey(keys []Key, k Key) bool {
+	for _, k2 := range keys {
+		if k2 == k {
+			return true
+		}
+	}
+	return false
+}
+
 type Player struct {
 	Name string
 	// X    int
 	Item // Embed Item
 	// T
 	Keys []Key
-}
-
-func (p *Player) FoundKeys(k Key) error {
-	switch k {
-	case Jade, Copper, Crystal:
-		p.Keys = append(p.Keys, k)
-	default:
-		return fmt.Errorf("unknown key type %d", k)
-	}
-	return nil
 }
 
 /*
