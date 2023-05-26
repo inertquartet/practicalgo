@@ -45,6 +45,9 @@ func main() {
 
 	k := Jade
 	fmt.Println("k: ", k)
+	fmt.Println("key: ", Key(17))
+	// time.Time implements the json.Marshaler interface
+	// json.NewEncoder(os.Stdout).Encode(time.Now())
 }
 
 // This is an implementation of the fmt.Stringer interface
@@ -60,6 +63,12 @@ func (k Key) String() string {
 
 	return fmt.Sprintf("<Key %d>", k)
 }
+
+/* Exercise
+- Add a "Keys" field to Player which is a slice of Key
+- Add a "FoundKey(k key) error" method to Player which will add k to Key if it's not already there.
+    - Err if k is not one of the known key types
+*/
 
 // Go's version of "enum"
 const (
@@ -99,6 +108,17 @@ type Player struct {
 	// X    int
 	Item // Embed Item
 	// T
+	Keys []Key
+}
+
+func (p *Player) FoundKeys(k Key) error {
+	switch k {
+	case Jade, Copper, Crystal:
+		p.Keys = append(p.Keys, k)
+	default:
+		return fmt.Errorf("unknown key type %d", k)
+	}
+	return nil
 }
 
 /*
